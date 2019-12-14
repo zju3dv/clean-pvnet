@@ -58,6 +58,8 @@ Download dataset:
 
 ## Testing
 
+We provide the pretrained models of objects on Linemod, which can be found at [here](https://1drv.ms/f/s!AtZjYZ01QjphgQBQDQghxjbkik5f).
+
 Take the testing on `cat` as an example.
 
 1. Prepare the data related to `cat`:
