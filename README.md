@@ -80,7 +80,7 @@ python run.py --type evaluate --cfg_file configs/linemod.yaml test.dataset Linem
 
 ## Visualization
 
-Take the testing on `cat` as an example.
+Take the `cat` as an example.
 
 1. Prepare the data related to `cat`:
     ```
