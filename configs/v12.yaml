@@ -1,0 +1,24 @@
+# wait
+model: 'cat_v12'
+model_dir: 'data/model'
+network: 'res'
+heads: ''
+task: 'pvnet'
+gpus: (0, 1, 2, 3)
+resume: true
+
+train:
+    optim: 'adam'
+    lr: 1e-3
+    epoch: 240
+    milestones: (20, 40, 60, 80, 100, 120, 160, 180, 200, 220)
+    gamma: 0.5
+    batch_size: 40
+    dataset: 'LinemodTrain'
+    cropresize_rate: 1.0
+    rotate_rate: 1.0
+    rotate_min: -30
+    rotate_max: 30
+test:
+    dataset: 'LinemodTest'
+    batch_size: 1
