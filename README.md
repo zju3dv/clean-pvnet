@@ -37,6 +37,8 @@ The structure of this project is described in [project_structure.md](project_str
     python setup.py build_ext --inplace
     cd ../ransac_voting
     python setup.py build_ext --inplace
+    cd ../fps
+    python setup.py
     ```
 3. Set up datasets:
     ```
