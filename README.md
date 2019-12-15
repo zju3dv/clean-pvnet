@@ -122,9 +122,10 @@ If setup correctly, the output will look like
 ![tensorboard](./assets/tensorboard.png)
 
 
-## Training on the custom dataset
+## Training on the custom object
 
-1. Prepare a dataset as the following structure:
+1. Create a dataset using https://github.com/F2Wang/ObjectDatasetTools
+2. Organize the dataset as the following structure:
     ```
     ├── /path/to/dataset
     │   ├── model.ply
