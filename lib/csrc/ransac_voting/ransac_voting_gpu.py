@@ -131,7 +131,7 @@ def ransac_voting_layer_v3(mask, vertex, round_hyp_num, inlier_thresh=0.999, con
         # if too many inliers, we randomly down sample it
         if foreground_num > max_num:
             selection = torch.zeros(cur_mask.shape, dtype=torch.float32, device=mask.device).uniform_(0, 1)
-            selected_mask = (selection < (max_num / foreground_num.float()))
+            selected_mask = (selection < (max_num / foreground_num.float())).byte()
             cur_mask *= selected_mask
 
         coords = torch.nonzero(cur_mask).float()  # [tn,2]
