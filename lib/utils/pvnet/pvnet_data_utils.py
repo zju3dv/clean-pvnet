@@ -56,7 +56,11 @@ def get_ply_model(model_path):
 
 def read_linemod_mask(path, ann_type, cls_idx):
     if ann_type == 'real':
-        return (np.asarray(Image.open(path))[:, :, 0] != 0).astype(np.uint8)
+        mask = np.array(Image.open(path))
+        if len(mask.shape) == 3:
+            return (mask[..., 0] != 0).astype(np.uint8)
+        else:
+            return (mask != 0).astype(np.uint8)
     elif ann_type == 'fuse':
         return (np.asarray(Image.open(path)) == cls_idx).astype(np.uint8)
     elif ann_type == 'render':
