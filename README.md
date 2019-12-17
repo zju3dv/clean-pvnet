@@ -163,6 +163,14 @@ If setup correctly, the output will look like
     ```
     tensorboard --logdir data/record/pvnet
     ```
+6. Visualize:
+    ```
+    python run.py --type visualize --cfg_file configs/linemod.yaml train.datset CustomTrain test.dataset CustomTrain model mycat
+    ```
+7. Test:
+    ```
+    python run.py --type evaluate --cfg_file configs/linemod.yaml train.datset CustomTrain test.dataset CustomTrain model mycat
+    ```
 
 An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/EXkFCvV2J0BBtlwKSyC20b4BdyPm3LTYqIZ-vnVTGJMGtg?e=WC2Cgm).
 
