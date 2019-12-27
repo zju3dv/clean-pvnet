@@ -26,6 +26,7 @@ The structure of this project is described in [project_structure.md](project_str
     pip install torch==1.1.0 -f https://download.pytorch.org/whl/cu90/stable
 
     pip install Cython==0.28.2
+    sudo apt-get install libglfw3-dev libglfw3
     pip install -r requirements.txt
     ```
 2. Compile cuda extensions under `lib/csrc`:
