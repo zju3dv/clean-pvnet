@@ -102,7 +102,10 @@ def b_inv(b_mat):
     :return:
     '''
     eye = b_mat.new_ones(b_mat.size(-1)).diag().expand_as(b_mat)
-    b_inv, _ = torch.solve(eye, b_mat)
+    try:
+        b_inv, _ = torch.solve(eye, b_mat)
+    except:
+        b_inv = eye
     return b_inv
 
 
