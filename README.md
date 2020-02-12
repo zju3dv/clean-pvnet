@@ -76,7 +76,7 @@ python run.py --type evaluate --cfg_file configs/linemod.yaml test.dataset Linem
 4. Test with icp:
 ```
 python run.py --type evaluate --cfg_file configs/linemod.yaml model cat test.icp True
-python run.py --type evaluate --cfg_file configs/linemod.yaml test.dataset LinemodOccTest model cat test.icp
+python run.py --type evaluate --cfg_file configs/linemod.yaml test.dataset LinemodOccTest model cat test.icp True
 ```
 
 ## Visualization
