@@ -38,6 +38,8 @@ The structure of this project is described in [project_structure.md](project_str
     python setup.py build_ext --inplace
     cd ../ransac_voting
     python setup.py build_ext --inplace
+    cd ../nn
+    python setup.py build_ext --inplace
     cd ../fps
     python setup.py
     ```
