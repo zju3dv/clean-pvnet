@@ -67,5 +67,9 @@ def read_linemod_mask(path, ann_type, cls_idx):
         return (np.asarray(Image.open(path))).astype(np.uint8)
 
 
-def read_tless_mask(path):
-    return (np.asarray(Image.open(path))).astype(np.uint8)
+def read_tless_mask(ann_type, path):
+    if ann_type == 'real':
+        return (np.asarray(Image.open(path))).astype(np.uint8)
+    elif ann_type == 'render':
+        depth = np.asarray(Image.open(path))
+        return (depth != 65535).astype(np.uint8)
