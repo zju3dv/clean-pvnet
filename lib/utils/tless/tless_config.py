@@ -1,4 +1,5 @@
 import numpy as np
+from lib.config import cfg
 
 mean = np.array([0.40789654, 0.44719302, 0.47026115],
                     dtype=np.float32).reshape(1, 1, 3)
@@ -20,3 +21,15 @@ num_obj_in_training_image = 6
 train_w, train_h = 720, 540
 
 ct_score = 0.2
+
+visib_gt_min = 0.1
+vsd_cost = 'step'
+vsd_delta = 15
+vsd_tau = 20
+error_thresh_vsd = 0.3
+
+pvnet_input_scale = cfg.tless.pvnet_input_scale
+scale_train_ratio = cfg.tless.scale_train_ratio
+scale_ratio = cfg.tless.scale_ratio
+box_train_ratio = cfg.tless.box_train_ratio
+box_ratio = cfg.tless.box_ratio

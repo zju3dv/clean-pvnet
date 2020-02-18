@@ -49,3 +49,11 @@ def project(xyz, K, RT):
     xy = xyz[:, :2] / xyz[:, 2:]
     return xy
 
+
+def cm_degree_5(pose_pred, pose_targets):
+    translation_distance = np.linalg.norm(pose_pred[:, 3] - pose_targets[:, 3]) * 100
+    rotation_diff = np.dot(pose_pred[:, :3], pose_targets[:, :3].T)
+    trace = np.trace(rotation_diff)
+    trace = trace if trace <= 3 else 3
+    angular_distance = np.rad2deg(np.arccos((trace - 1.) / 2.))
+    return translation_distance, angular_distance

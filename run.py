@@ -64,6 +64,8 @@ def run_evaluate():
     from lib.networks import make_network
     from lib.utils.net_utils import load_network
 
+    torch.manual_seed(0)
+
     network = make_network(cfg).cuda()
     load_network(network, cfg.model_dir, epoch=cfg.test.epoch)
     network.eval()
@@ -166,7 +168,7 @@ def run_net_utils():
 
 def run_linemod():
     from lib.datasets.linemod import linemod_to_coco
-    linemod_to_coco.linemod_to_coco(cfg)
+    linemod_to_coco.linemod_to_coco(cfg, only_test=True)
 
 
 def run_tless():
@@ -184,14 +186,33 @@ def run_tless():
     # handle_ag_data.get_ag_mask()
     # handle_ag_data.prepare_asset()
 
+    # tless_to_coco.handle_train_symmetry_pose()
     # tless_to_coco.tless_train_to_coco()
 
 
-def run_custom():
-    from tools import handle_custom_dataset
-    data_root = 'data/custom'
-    handle_custom_dataset.sample_fps_points(data_root)
-    handle_custom_dataset.custom_to_coco(data_root)
+def run_ycb():
+    from lib.datasets.ycb import handle_ycb
+    handle_ycb.collect_ycb()
+
+
+def run_render():
+    from lib.utils.renderer import opengl_utils
+    from lib.utils.vsd import inout
+    from lib.utils.linemod import linemod_config
+    import matplotlib.pyplot as plt
+
+    obj_path = 'data/linemod/cat/cat.ply'
+    model = inout.load_ply(obj_path)
+    model['pts'] = model['pts'] * 1000.
+    im_size = (640, 300)
+    opengl = opengl_utils.NormalRender(model, im_size)
+
+    K = linemod_config.linemod_K
+    pose = np.load('data/linemod/cat/pose/pose0.npy')
+    depth = opengl.render(im_size, 100, 10000, K, pose[:, :3], pose[:, 3:] * 1000)
+
+    plt.imshow(depth)
+    plt.show()
 
 
 if __name__ == '__main__':

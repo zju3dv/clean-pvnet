@@ -13,6 +13,21 @@ from lib.config import cfg
 from lib.utils.tless import tless_train_utils, tless_utils, tless_config, tless_pvnet_utils
 from lib.utils import data_utils
 import cv2
+import imgaug
+import time
+
+
+def get_rot(index):
+    rot = np.random.uniform() * cfg.tless.rot
+    if int(cfg.cls_type) == 8:
+        if index >= 1080:
+            rot = 0
+    if int(cfg.cls_type) in [9, 24]:
+        if index <= 215:
+            rot = 0
+    if int(cfg.cls_type) in [27, 28]:
+        rot = 0
+    return rot
 
 
 class Dataset(data.Dataset):
@@ -24,6 +39,7 @@ class Dataset(data.Dataset):
 
         self.coco = COCO(ann_file)
         self.img_ids = np.array(sorted(self.coco.getImgIds()))
+        self.img_ids = self.img_ids[::3] if split == 'mini' else self.img_ids
 
         self.bg_paths = np.array(glob.glob('data/sun/JPEGImages/*.jpg'))
 
@@ -32,23 +48,27 @@ class Dataset(data.Dataset):
         cat_ids.remove(int(cfg.cls_type))
         self.oann_ids = self.other_obj_coco.getAnnIds(catIds=cat_ids)
 
-    def read_data(self, img_id):
+    def read_data(self, img_id, index):
         ann_ids = self.coco.getAnnIds(imgIds=img_id)
         anno = self.coco.loadAnns(ann_ids)[0]
 
         path = self.coco.loadImgs(int(img_id))[0]['file_name']
         inp = cv2.imread(path)
         kpt_2d = np.concatenate([anno['fps_2d'], [anno['center_2d']]], axis=0)
-        mask = pvnet_data_utils.read_tless_mask(anno['mask_path'])
+        mask = pvnet_data_utils.read_tless_mask(anno['type'], anno['mask_path'])
 
-        rot = np.random.uniform() * 360
+        rot = get_rot(index)
         inp, _ = tless_train_utils.rotate_image(inp, rot, get_rot=True)
         if np.random.uniform() < 0.8:
+            imgaug.seed(int(round(time.time() * 1000) % (2 ** 16)))
             inp = tless_train_utils.color_jitter.augment_image(inp)
         mask, rot = tless_train_utils.rotate_image(mask, rot, get_rot=True)
         kpt_2d = data_utils.affine_transform(kpt_2d, rot)
 
-        return inp, kpt_2d, mask
+        x, y, w, h = cv2.boundingRect(mask)
+        bbox = [x, y, x + w - 1, y + h - 1]
+
+        return inp, kpt_2d, mask, bbox
 
     def get_training_img(self, img, kpt_2d, mask):
         pixel_num = np.sum(mask)
@@ -74,7 +94,7 @@ class Dataset(data.Dataset):
             train_img, _ = paste_img0_on_img1(train_img, train_mask, fused_img, fused_mask)
         else:
             img, mask = paste_img0_on_img1(fused_img, fused_mask, train_img, train_mask)
-            if np.sum(mask) / pixel_num < 0.2:
+            if np.sum(mask) / pixel_num < cfg.tless.ratio:
                 train_img, _ = paste_img0_on_img1(train_img, train_mask, fused_img, fused_mask)
             else:
                 train_img, train_mask = img, mask
@@ -85,9 +105,9 @@ class Dataset(data.Dataset):
         return train_img, kpt_2d, train_mask, bbox
 
     def __getitem__(self, index):
-        index = 0
+        # index = np.random.randint(len(self.img_ids))
         img_id = self.img_ids[index]
-        img, kpt_2d, mask = self.read_data(img_id)
+        img, kpt_2d, mask, bbox = self.read_data(img_id, index)
         img, kpt_2d, mask, bbox = self.get_training_img(img, kpt_2d, mask)
 
         orig_img, inp, trans_input, center, scale, inp_hw = \
@@ -96,7 +116,7 @@ class Dataset(data.Dataset):
         mask = cv2.warpAffine(mask, trans_input, (inp_hw[1], inp_hw[0]), flags=cv2.INTER_NEAREST)
         vertex = pvnet_data_utils.compute_vertex(mask, kpt_2d).transpose(2, 0, 1)
 
-        ret = {'inp': inp, 'mask': mask.astype(np.uint8), 'vertex': vertex}
+        ret = {'inp': inp, 'mask': mask.astype(np.uint8), 'vertex': vertex, 'meta': {}}
         # visualize_utils.visualize_ann(orig_img, kpt_2d, mask, False)
 
         return ret

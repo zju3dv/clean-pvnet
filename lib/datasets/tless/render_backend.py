@@ -276,7 +276,7 @@ def setup_light(scene):
 
     azi = 0
     for i in range(0, 4):
-        ele = np.random.uniform(0, 40)
+        ele = np.random.uniform(-40, 40)
         dist = np.random.uniform(1, 2)
         x, y, z = obj_location(dist, azi, ele)
         lamp_name = 'Lamp{}'.format(i)
@@ -371,13 +371,12 @@ class Renderer(object):
         poses = np.load('data/tless/poses.npy')
         bg_imgs = np.load('data/tless/bg_imgs.npy')
 
+        os.system('mkdir -p {}'.format(self.cfg['output_dir']))
         begin_i = len(os.listdir(self.cfg['output_dir'])) // 3
         for i in tqdm.tqdm(range(0, self.cfg['num_syn'])):
-            i = 276
             bg_img = bg_imgs[np.random.randint(0, len(bg_imgs))]
             pose = poses[i]
             self.render(bg_img, pose, i)
-            exit()
 
 
 if __name__ == '__main__':
@@ -402,8 +401,8 @@ if __name__ == '__main__':
         'cad_path': args.cad_path,
         'output_dir': args.output_dir,
         'num_syn': args.num_syn,
-        'width': 720,
-        'height': 540,
+        'width': 256,
+        'height': 256,
         'format': 'PNG',
         'min_depth': 0,
         'max_depth': 10,

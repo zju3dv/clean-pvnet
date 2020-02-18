@@ -38,3 +38,8 @@ def visualize_detection(img, data):
         x_max, y_max = xs[i] + w / 2, ys[i] + h / 2
         plt.plot([x_min, x_min, x_max, x_max, x_min], [y_min, y_max, y_max, y_min, y_min])
     plt.show()
+
+
+def visualize_img(orig_imgs):
+    plt.imshow(orig_imgs[0][..., [2, 1, 0]])
+    plt.show()

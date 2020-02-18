@@ -7,6 +7,7 @@ from pycocotools.coco import COCO
 import os
 from lib.utils.tless import tless_test_utils, visualize_utils, tless_config, tless_pvnet_utils
 import json
+from lib.config import cfg
 
 
 class CocoDet:
@@ -30,10 +31,16 @@ class CocoDet:
 
 
 class Dataset(data.Dataset):
-    def __init__(self, det_file, ann_file, obj_id, split):
+    def __init__(self, det_file, ann_file, det_gt_file, obj_id, split):
         super(Dataset, self).__init__()
 
         self.split = split
+
+        if cfg.test.det_gt:
+            self.coco_det_gt = COCO(det_gt_file)
+            self.path_to_img_id = {}
+            for img_data in self.coco_det_gt.dataset['images']:
+                self.path_to_img_id[img_data['rgb_path']] = img_data['id']
 
         self.coco_det = CocoDet(det_file)
         self.coco = COCO(ann_file)
@@ -41,14 +48,28 @@ class Dataset(data.Dataset):
 
         gt_img_ids = self.coco.getImgIds(catIds=[self.obj_id])
         det_img_ids = self.coco_det.getImgIds(self.obj_id)
-        self.anns = np.array(list(set(gt_img_ids).intersection(det_img_ids)))
+
+        if cfg.test.det_gt:
+            self.anns = np.array(gt_img_ids)
+        else:
+            self.anns = np.array(list(set(gt_img_ids).intersection(det_img_ids)))
+
         self.anns = self.anns[::3] if split == 'mini' else self.anns
 
     def read_data(self, img_id):
         path = self.coco.loadImgs(int(img_id))[0]['file_name']
         img = cv2.imread(path)
-        bboxes = self.coco_det.getBBoxes(img_id, self.obj_id)
+
+        if cfg.test.det_gt:
+            det_gt_id = self.path_to_img_id[path]
+            ann_ids = self.coco_det_gt.getAnnIds(imgIds=det_gt_id)
+            anno = self.coco_det_gt.loadAnns(ann_ids)
+            anno = [a for a in anno if a['category_id'] == self.obj_id]
+            bboxes = [a['bbox'] for a in anno]
+        else:
+            bboxes = self.coco_det.getBBoxes(img_id, self.obj_id)
         bboxes = [tless_test_utils.xywh_to_xyxy(box) for box in bboxes]
+
         return img, bboxes
 
     def __getitem__(self, index):
@@ -59,7 +80,11 @@ class Dataset(data.Dataset):
         orig_imgs, inps, centers, scales = [list(d) for d in zip(*data_list)]
         inp_hw = tless_pvnet_utils.input_scale.tolist()
 
-        ret = {'inp': inps, 'center': centers, 'scale': scales, 'pose_test': ''}
+        ret = {'inp': inps}
+        bboxes = [np.array(box) for box in bboxes]
+        meta = {'center': centers, 'scale': scales, 'box': bboxes, 'img_id': img_id, 'pose_test': ''}
+        ret.update({'meta': meta})
+        # visualize_utils.visualize_img(orig_imgs)
 
         return ret
 

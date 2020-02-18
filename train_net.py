@@ -19,7 +19,7 @@ def train(cfg, network):
     begin_epoch = load_model(network, optimizer, scheduler, recorder, cfg.model_dir, resume=cfg.resume)
     # set_lr_scheduler(cfg, scheduler)
 
-    train_loader = make_data_loader(cfg, is_train=True)
+    train_loader = make_data_loader(cfg, is_train=True, max_iter=cfg.ep_iter)
     val_loader = make_data_loader(cfg, is_train=False)
     # train_loader = make_data_loader(cfg, is_train=True, max_iter=100)
 

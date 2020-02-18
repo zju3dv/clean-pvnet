@@ -46,13 +46,28 @@ def augment(img, split):
     return orig_img, inp, trans_input, trans_output, center, scale, inp_out_hw
 
 
+def magnify_box(box, times, h, w):
+    box_mean = np.mean(box, axis=0)
+    box = np.round((box - box_mean) * times + box_mean).astype(np.int32)
+    box[:, 0] = np.clip(box[:, 0], a_min=0, a_max=w-1)
+    box[:, 1] = np.clip(box[:, 1], a_min=0, a_max=h-1)
+    return box
+
+
 def pvnet_transform(img, box):
     center = np.array([(box[0] + box[2]) / 2., (box[1] + box[3]) / 2.], dtype=np.float32)
-    scale = np.array([box[2] - box[0], box[3] - box[1]], dtype=np.float32) * 1.2
+    scale = max(box[2] - box[0], box[3] - box[1]) * tless_config.scale_ratio
 
     input_w, input_h = tless_pvnet_utils.input_scale
     trans_input = data_utils.get_affine_transform(center, scale, 0, [input_w, input_h])
     inp = cv2.warpAffine(img, trans_input, (input_w, input_h), flags=cv2.INTER_LINEAR)
+
+    box = np.array(box).reshape(-1, 2)
+    box = data_utils.affine_transform(box, trans_input)
+    box = magnify_box(box, tless_config.box_ratio, input_h, input_w)
+    new_img = np.zeros_like(inp)
+    new_img[box[0, 1]:box[1, 1]+1, box[0, 0]:box[1, 0]+1] = inp[box[0, 1]:box[1, 1]+1, box[0, 0]:box[1, 0]+1]
+    inp = new_img
 
     orig_img = inp.copy()
     inp = (inp.astype(np.float32) / 255.)

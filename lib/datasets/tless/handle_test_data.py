@@ -8,6 +8,7 @@ import numpy as np
 from lib.datasets.tless import opengl_renderer
 from lib.utils import base_utils
 import cv2
+from lib.utils.tless import tless_config
 
 
 def test_to_coco():
@@ -43,7 +44,7 @@ def test_to_coco():
                 pixel_num = np.sum(mask_)
                 a_pixel_num = a_pixel_nums[instance_id]
 
-                if pixel_num / a_pixel_num < 0.1:
+                if pixel_num / a_pixel_num < tless_config.visib_gt_min:
                     continue
 
                 ann_id += 1
@@ -147,7 +148,8 @@ def record_scene_ann(model_meta, pose_meta, img_id, ann_id, images, annotations)
         rgb = Image.open(rgb_path)
         img_size = rgb.size
         img_id += 1
-        info = {'file_name': rgb_path, 'height': img_size[1], 'width': img_size[0], 'id': img_id}
+        depth_path = rgb_path.replace('rgb', 'depth')
+        info = {'file_name': rgb_path, 'depth_path': depth_path, 'height': img_size[1], 'width': img_size[0], 'id': img_id}
         images.append(info)
 
         ind = int(os.path.basename(rgb_path).replace('.png', ''))

@@ -1,6 +1,7 @@
 from yacs.config import CfgNode as CN
 import argparse
 import os
+import open3d
 
 cfg = CN()
 
@@ -23,7 +24,8 @@ cfg.gpus = [0, 1, 2, 3]
 # if load the pretrained network
 cfg.resume = True
 
-# save and eval
+# epoch
+cfg.ep_iter = -1
 cfg.save_ep = 5
 cfg.eval_ep = 5
 
@@ -34,7 +36,6 @@ cfg.eval_ep = 5
 cfg.train = CN()
 
 cfg.train.dataset = 'CocoTrain'
-cfg.train.sampler = ''
 cfg.train.epoch = 140
 cfg.train.num_workers = 8
 
@@ -61,13 +62,15 @@ cfg.train.resize_ratio_min = 0.8
 cfg.train.resize_ratio_max = 1.2
 
 
-
 # test
 cfg.test = CN()
 cfg.test.dataset = 'CocoVal'
 cfg.test.batch_size = 1
 cfg.test.epoch = -1
 cfg.test.icp = False
+cfg.test.un_pnp = False
+cfg.test.vsd = False
+cfg.test.det_gt = False
 
 # recorder
 cfg.record_dir = 'data/record'
@@ -81,6 +84,15 @@ cfg.skip_eval = False
 # dataset
 cfg.cls_type = 'cat'
 
+# tless
+cfg.tless = CN()
+cfg.tless.pvnet_input_scale = (256, 256)
+cfg.tless.scale_train_ratio = (1.8, 2.4)
+cfg.tless.scale_ratio = 2.4
+cfg.tless.box_train_ratio = (1.0, 1.2)
+cfg.tless.box_ratio = 1.2
+cfg.tless.rot = 360.
+cfg.tless.ratio = 0.8
 
 _heads_factory = {
     'pvnet': CN({'vote_dim': 18, 'seg_dim': 2}),
@@ -97,6 +109,12 @@ def parse_cfg(cfg, args):
 
     if cfg.task in _heads_factory:
         cfg.heads = _heads_factory[cfg.task]
+
+    if 'Tless' in cfg.test.dataset and cfg.task == 'pvnet':
+        cfg.cls_type = '{:02}'.format(int(cfg.cls_type))
+
+    if 'Ycb' in cfg.test.dataset and cfg.task == 'pvnet':
+        cfg.cls_type = '{}'.format(int(cfg.cls_type))
 
     cfg.det_dir = os.path.join(cfg.model_dir, cfg.task, args.det)
 

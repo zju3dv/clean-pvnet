@@ -26,8 +26,9 @@ def make_dataset(cfg, dataset_name, transforms, is_train=True):
     dataset = _dataset_factory(data_source, cfg.task)
     del args['id']
     # args['cfg'] = cfg
-    if 'linemod' in data_source:
+    if 'Linemod' in dataset_name:
         args['transforms'] = transforms
+        args['cfg'] = cfg
         args['split'] = 'train' if is_train == True else 'test'
     # args['is_train'] = is_train
     dataset = dataset(**args)
@@ -46,7 +47,7 @@ def make_batch_data_sampler(cfg, sampler, batch_size, drop_last, max_iter, is_tr
     batch_sampler = torch.utils.data.sampler.BatchSampler(sampler, batch_size, drop_last)
     if max_iter != -1:
         batch_sampler = samplers.IterationBasedBatchSampler(batch_sampler, max_iter)
-    if cfg.train.sampler == 'image_size':
+    if cfg.task == 'pvnet' and ('Linemod' in cfg.train.dataset or 'Linemod' in cfg.test.dataset):
         batch_sampler = samplers.ImageSizeBatchSampler(sampler, batch_size, drop_last, 256, 480, 640)
     return batch_sampler
 
@@ -72,8 +73,6 @@ def make_data_loader(cfg, is_train=True, is_distributed=False, max_iter=-1):
     sampler = make_data_sampler(dataset, shuffle)
     batch_sampler = make_batch_data_sampler(cfg, sampler, batch_size, drop_last, max_iter, is_train)
     num_workers = cfg.train.num_workers
-    if not is_train and cfg.test.dataset[:4] != 'City':
-        num_workers = 0
     collator = make_collator(cfg)
     data_loader = torch.utils.data.DataLoader(
         dataset,
