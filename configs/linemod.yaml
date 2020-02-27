@@ -15,7 +15,6 @@ train:
     gamma: 0.5
     batch_size: 32
     dataset: 'LinemodTrain'
-    sampler: 'image_size'
     cropresize_rate: 1.0
     rotate_rate: 1.0
     rotate_min: -30
