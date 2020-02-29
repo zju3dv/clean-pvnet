@@ -28,7 +28,7 @@ def make_dataset(cfg, dataset_name, transforms, is_train=True):
     # args['cfg'] = cfg
     if 'Linemod' in dataset_name:
         args['transforms'] = transforms
-        args['cfg'] = cfg
+        # args['cfg'] = cfg
         args['split'] = 'train' if is_train == True else 'test'
     # args['is_train'] = is_train
     dataset = dataset(**args)
