@@ -168,7 +168,7 @@ def run_net_utils():
 
 def run_linemod():
     from lib.datasets.linemod import linemod_to_coco
-    linemod_to_coco.linemod_to_coco(cfg, only_test=True)
+    linemod_to_coco.linemod_to_coco(cfg)
 
 
 def run_tless():

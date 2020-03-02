@@ -299,7 +299,6 @@ def _linemod_to_coco(cls, split):
 
 
 def linemod_to_coco(cfg, only_test=False):
-    if not only_test:
-        _linemod_to_coco(cfg.cls_type, 'train')
+    _linemod_to_coco(cfg.cls_type, 'train')
     _linemod_to_coco(cfg.cls_type, 'test')
     _linemod_to_coco(cfg.cls_type, 'occ')
