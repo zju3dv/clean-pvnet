@@ -18,7 +18,7 @@ class NetworkWrapper(nn.Module):
         scalar_stats = {}
         loss = 0
 
-        if 'pose_test' in batch.keys():
+        if 'pose_test' in batch['meta'].keys():
             return output, loss, {}, {}
 
         weight = batch['mask'][:, None].float()
