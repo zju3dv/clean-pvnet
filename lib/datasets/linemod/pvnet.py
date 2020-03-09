@@ -51,7 +51,7 @@ class Dataset(data.Dataset):
             inp, kpt_2d, mask = self._transforms(inp, kpt_2d, mask)
 
         vertex = pvnet_data_utils.compute_vertex(mask, kpt_2d).transpose(2, 0, 1)
-        ret = {'inp': inp, 'mask': mask.astype(np.uint8), 'vertex': vertex, 'img_id': img_id, 'meta': ''}
+        ret = {'inp': inp, 'mask': mask.astype(np.uint8), 'vertex': vertex, 'img_id': img_id, 'meta': {}}
         # visualize_utils.visualize_linemod_ann(torch.tensor(inp), kpt_2d, mask, True)
 
         return ret

@@ -19,6 +19,7 @@ class NetworkWrapper(nn.Module):
         loss = 0
 
         if 'pose_test' in batch['meta'].keys():
+            loss = torch.tensor(0).to(batch['inp'].device)
             return output, loss, {}, {}
 
         weight = batch['mask'][:, None].float()
