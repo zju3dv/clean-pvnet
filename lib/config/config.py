@@ -61,6 +61,7 @@ cfg.train.overlap_ratio = 0.8
 cfg.train.resize_ratio_min = 0.8
 cfg.train.resize_ratio_max = 1.2
 
+cfg.train.batch_sampler = ''
 
 # test
 cfg.test = CN()
@@ -71,6 +72,8 @@ cfg.test.icp = False
 cfg.test.un_pnp = False
 cfg.test.vsd = False
 cfg.test.det_gt = False
+
+cfg.test.batch_sampler = ''
 
 # recorder
 cfg.record_dir = 'data/record'

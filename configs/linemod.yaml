@@ -20,6 +20,8 @@ train:
     rotate_min: -30
     rotate_max: 30
     weight_decay: 0.
+    batch_sampler: 'image_size'
 test:
     dataset: 'LinemodTest'
     batch_size: 1
+    batch_sampler: 'image_size'

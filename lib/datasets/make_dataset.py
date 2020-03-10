@@ -47,8 +47,11 @@ def make_batch_data_sampler(cfg, sampler, batch_size, drop_last, max_iter, is_tr
     batch_sampler = torch.utils.data.sampler.BatchSampler(sampler, batch_size, drop_last)
     if max_iter != -1:
         batch_sampler = samplers.IterationBasedBatchSampler(batch_sampler, max_iter)
-    if cfg.task == 'pvnet' and ('Linemod' in cfg.train.dataset or 'Linemod' in cfg.test.dataset):
+
+    strategy = cfg.train.batch_sampler if is_train else cfg.test.batch_sampler
+    if strategy == 'image_size':
         batch_sampler = samplers.ImageSizeBatchSampler(sampler, batch_size, drop_last, 256, 480, 640)
+
     return batch_sampler
 
 
