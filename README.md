@@ -153,6 +153,8 @@ If setup correctly, the output will look like
 
 ## Training on the custom object
 
+An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/Ec6Hd9j7z4lCiwDhqIwDcScBGPw2rsbn6FJh1C2FwbPJTw?e=xcKGAw).
+
 1. Create a dataset using https://github.com/F2Wang/ObjectDatasetTools
 2. Organize the dataset as the following structure:
     ```
@@ -202,7 +204,7 @@ If setup correctly, the output will look like
     python run.py --type evaluate --cfg_file configs/custom.yaml
     ```
 
-An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/EXkFCvV2J0BBtlwKSyC20b4BdyPm3LTYqIZ-vnVTGJMGtg?e=WC2Cgm).
+An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/Ec6Hd9j7z4lCiwDhqIwDcScBGPw2rsbn6FJh1C2FwbPJTw?e=xcKGAw).
 
 ## Citation
 
