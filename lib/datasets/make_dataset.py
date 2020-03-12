@@ -25,7 +25,7 @@ def make_dataset(cfg, dataset_name, transforms, is_train=True):
     data_source = args['id']
     dataset = _dataset_factory(data_source, cfg.task)
     del args['id']
-    if 'linemod' in data_source:
+    if data_source in ['linemod', 'custom']:
         args['transforms'] = transforms
         args['split'] = 'train' if is_train == True else 'test'
     # args['is_train'] = is_train

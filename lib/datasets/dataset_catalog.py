@@ -73,10 +73,16 @@ class DatasetCatalog(object):
             'data_root': 'data/YCB'
         },
 	'CustomTrain': {
-            'id': 'linemod',
+            'id': 'custom',
             'data_root': 'data/custom',
             'ann_file': 'data/custom/train.json',
             'split': 'train'
+        },
+        'CustomTest': {
+            'id': 'custom',
+            'data_root': 'data/custom',
+            'ann_file': 'data/custom/train.json',
+            'split': 'test'
         }
     }
 
