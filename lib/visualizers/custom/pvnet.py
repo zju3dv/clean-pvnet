@@ -15,11 +15,8 @@ std = pvnet_config.std
 
 class Visualizer:
 
-    def __init__(self, split):
-        if split=='test':
-            args = DatasetCatalog.get(cfg.test.dataset)
-        else:
-            args = DatasetCatalog.get(cfg.train.dataset)
+    def __init__(self):
+        args = DatasetCatalog.get(cfg.test.dataset)
         self.ann_file = args['ann_file']
         self.coco = coco.COCO(self.ann_file)
 

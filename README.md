@@ -102,6 +102,8 @@ We provide the pretrained models of objects on Tless, which can be found at [her
 
 ## Visualization
 
+### Visualization on Linemod
+
 Take the `cat` as an example.
 
 1. Prepare the data related to `cat`:
@@ -117,6 +119,15 @@ python run.py --type visualize --cfg_file configs/linemod.yaml model cat
 If setup correctly, the output will look like
 
 ![cat](./assets/cat.png)
+
+### Visualization on Tless
+
+Visualize:
+```
+python run.py --type visualize --cfg_file configs/tless/tless_01.yaml
+# or
+python run.py --type visualize --cfg_file configs/tless/tless_01.yaml test.det_gt True
+```
 
 ## Training
 

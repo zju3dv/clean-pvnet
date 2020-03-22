@@ -1,9 +1,12 @@
 import os
 import imp
+from lib.datasets.dataset_catalog import DatasetCatalog
 
 
-def make_visualizer(cfg, split='test'):
-    module = '.'.join(['lib.visualizers', cfg.task])
-    path = os.path.join('lib/visualizers', cfg.task+'.py')
-    visualizer = imp.load_source(module, path).Visualizer(split)
+def make_visualizer(cfg):
+    task = cfg.task
+    data_source = DatasetCatalog.get(cfg.test.dataset)['id']
+    module = '.'.join(['lib.visualizers', data_source, task])
+    path = os.path.join('lib/visualizers', data_source, task+'.py')
+    visualizer = imp.load_source(module, path).Visualizer()
     return visualizer
