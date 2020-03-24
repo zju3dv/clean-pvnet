@@ -83,14 +83,17 @@ def record_occ_ann(model_meta, img_id, ann_id, images, annotations):
     for ind in tqdm.tqdm(inds):
         img_name = 'color_{:05d}.png'.format(ind)
         rgb_path = os.path.join(rgb_dir, img_name)
+        pose_dir = os.path.join(data_root, 'blender_poses', cls)
+        pose_path = os.path.join(pose_dir, 'pose{}.npy'.format(ind))
+        if not os.path.exists(pose_path):
+            continue
+
         rgb = Image.open(rgb_path)
         img_size = rgb.size
         img_id += 1
         info = {'file_name': rgb_path, 'height': img_size[1], 'width': img_size[0], 'id': img_id}
         images.append(info)
 
-        pose_dir = os.path.join(data_root, 'blender_poses', cls)
-        pose_path = os.path.join(pose_dir, 'pose{}.npy'.format(ind))
         pose = np.load(pose_path)
 
         corner_2d = project(corner_3d, K, pose)
