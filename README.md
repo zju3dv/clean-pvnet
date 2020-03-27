@@ -41,7 +41,11 @@ The structure of this project is described in [project_structure.md](project_str
     cd ../nn
     python setup.py build_ext --inplace
     cd ../fps
-    python setup.py
+    python setup.py build_ext --inplace
+
+    # If you want to use the uncertainty-driven PnP
+    cd ../uncertainty_pnp
+    python setup.py build_ext --inplace
     ```
 3. Set up datasets:
     ```
