@@ -80,15 +80,21 @@ Take the testing on `cat` as an example.
     ```
 2. Download the pretrained model of `cat` and put it to `$ROOT/data/model/pvnet/cat/199.pth`.
 3. Test:
-```
-python run.py --type evaluate --cfg_file configs/linemod.yaml model cat cls_type cat
-python run.py --type evaluate --cfg_file configs/linemod.yaml test.dataset LinemodOccTest model cat cls_type cat
-```
+    ```
+    python run.py --type evaluate --cfg_file configs/linemod.yaml model cat cls_type cat
+    python run.py --type evaluate --cfg_file configs/linemod.yaml test.dataset LinemodOccTest model cat cls_type cat
+    ```
 4. Test with icp:
-```
-python run.py --type evaluate --cfg_file configs/linemod.yaml model cat cls_type cat test.icp True
-python run.py --type evaluate --cfg_file configs/linemod.yaml test.dataset LinemodOccTest model cat cls_type cat test.icp True
-```
+    ```
+    python run.py --type evaluate --cfg_file configs/linemod.yaml model cat cls_type cat test.icp True
+    python run.py --type evaluate --cfg_file configs/linemod.yaml test.dataset LinemodOccTest model cat cls_type cat test.icp True
+    ```
+5. Test with the uncertainty-driven PnP:
+    ```
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./lib/csrc/uncertainty_pnp/lib
+    python run.py --type evaluate --cfg_file configs/linemod.yaml model cat cls_type cat test.un_pnp True
+    python run.py --type evaluate --cfg_file configs/linemod.yaml test.dataset LinemodOccTest model cat cls_type cat test.un_pnp True
+    ```
 
 ### Testing on Tless
 
