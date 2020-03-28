@@ -45,6 +45,9 @@ The structure of this project is described in [project_structure.md](project_str
 
     # If you want to use the uncertainty-driven PnP
     cd ../uncertainty_pnp
+    sudo apt-get install libgoogle-glog-dev
+    sudo apt-get install libsuitesparse-dev
+    sudo apt-get install libatlas-base-dev
     python setup.py build_ext --inplace
     ```
 3. Set up datasets:
