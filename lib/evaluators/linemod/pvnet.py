@@ -8,7 +8,7 @@ from lib.utils.linemod import linemod_config
 import torch
 if cfg.test.icp:
     from lib.utils.icp import icp_utils
-    from lib.utils.icp.icp_refiner.build import ext_
+    # from lib.utils.icp.icp_refiner.build import ext_
 if cfg.test.un_pnp:
     from lib.csrc.uncertainty_pnp import un_pnp_utils
     import scipy
@@ -48,9 +48,13 @@ class Evaluator:
 
         self.height = 480
         self.width = 640
-        if cfg.test.icp:
-            self.icp_refiner = ext_.Synthesizer(os.path.realpath(model_path))
-            self.icp_refiner.setup(self.width, self.height)
+
+        model = inout.load_ply(model_path)
+        model['pts'] = model['pts'] * 1000
+        self.icp_refiner = icp_utils.ICPRefiner(model, (self.width, self.height)) if cfg.test.icp else None
+        # if cfg.test.icp:
+        #     self.icp_refiner = ext_.Synthesizer(os.path.realpath(model_path))
+        #     self.icp_refiner.setup(self.width, self.height)
 
     def projection_2d(self, pose_pred, pose_targets, K, icp=False, threshold=5):
         model_2d_pred = pvnet_pose_utils.project(self.model, K, pose_pred)
@@ -94,7 +98,7 @@ class Evaluator:
         iou = (mask_pred & mask_gt).sum() / (mask_pred | mask_gt).sum()
         self.mask_ap.append(iou > 0.7)
 
-    def icp_refine_(self, pose_pred, anno, output, K):
+    def icp_refine(self, pose_pred, anno, output, K):
         depth = read_depth(anno['depth_path'])
         mask = torch.argmax(output['seg'], dim=1)[0].detach().cpu().numpy()
         if pose_pred[2, 3] <= 0:
@@ -126,7 +130,7 @@ class Evaluator:
 
         return pose_pred
 
-    def icp_refine(self, pose, anno, output):
+    def icp_refine_(self, pose, anno, output):
         depth = read_depth(anno['depth_path']).astype(np.uint16)
         mask = torch.argmax(output['seg'], dim=1)[0].detach().cpu().numpy()
         mask = mask.astype(np.int32)
@@ -183,7 +187,7 @@ class Evaluator:
             pose_pred = pvnet_pose_utils.pnp(kpt_3d, kpt_2d, K)
 
         if cfg.test.icp:
-            pose_pred_icp = self.icp_refine(pose_pred.copy(), anno, output)
+            pose_pred_icp = self.icp_refine(pose_pred.copy(), anno, output, K)
             if cfg.cls_type in ['eggbox', 'glue']:
                 self.add_metric(pose_pred_icp, pose_gt, syn=True, icp=True)
             else:
