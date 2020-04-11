@@ -199,9 +199,9 @@ An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.co
     │   │   ├── 1234.png
     │   │   ├── ...
     │   ├── pose/
-    │   │   ├── 0.npy
+    │   │   ├── pose0.npy
     │   │   ├── ...
-    │   │   ├── 1234.npy
+    │   │   ├── pose1234.npy
     │   │   ├── ...
     │   │   └──
     ```
