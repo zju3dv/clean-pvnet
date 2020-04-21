@@ -128,7 +128,7 @@ Take the `cat` as an example.
 2. Download the pretrained model of `cat` and put it to `$ROOT/data/model/pvnet/cat/199.pth`.
 3. Visualize:
     ```
-    python run.py --type visualize --cfg_file configs/linemod.yaml model cat
+    python run.py --type visualize --cfg_file configs/linemod.yaml model cat cls_type cat
     ```
 
 If setup correctly, the output will look like
