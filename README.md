@@ -17,6 +17,12 @@ The structure of this project is described in [project_structure.md](project_str
 
 ## Installation
 
+One way is to set up the environment with docker. See [this](https://github.com/zju3dv/clean-pvnet/tree/master/docker).
+
+Thanks **Floris Gaisser** for providing the docker implementation.
+
+Another way is to use the following commands.
+
 1. Set up the python environment:
     ```
     conda create -n pvnet python=3.7
