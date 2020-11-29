@@ -8,6 +8,8 @@ cfg = CN()
 # model
 cfg.model = 'hello'
 cfg.model_dir = 'data/model'
+cfg.det_model = ''
+cfg.kpt_model = ''
 
 # network
 cfg.network = 'dla_34'
@@ -75,6 +77,11 @@ cfg.test.det_gt = False
 
 cfg.test.batch_sampler = ''
 
+cfg.det_meta = CN()
+cfg.det_meta.arch = 'dla'
+cfg.det_meta.num_layers = 34
+cfg.det_meta.heads = CN({'ct_hm': 1, 'wh': 2})
+
 # recorder
 cfg.record_dir = 'data/record'
 
@@ -99,6 +106,7 @@ cfg.tless.ratio = 0.8
 
 _heads_factory = {
     'pvnet': CN({'vote_dim': 18, 'seg_dim': 2}),
+    'ct_pvnet': CN({'vote_dim': 18, 'seg_dim': 2}),
     'ct': CN({'ct_hm': 30, 'wh': 2})
 }
 

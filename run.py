@@ -50,7 +50,7 @@ def run_network():
         with torch.no_grad():
             torch.cuda.synchronize()
             start = time.time()
-            network(batch['inp'])
+            network(batch['inp'], batch)
             torch.cuda.synchronize()
             total_time += time.time() - start
     print(total_time / len(data_loader))
@@ -213,13 +213,35 @@ def run_render():
 
     plt.imshow(depth)
     plt.show()
-    
+
 
 def run_custom():
     from tools import handle_custom_dataset
     data_root = 'data/custom'
     handle_custom_dataset.sample_fps_points(data_root)
     handle_custom_dataset.custom_to_coco(data_root)
+
+
+def run_detector_pvnet():
+    from lib.networks import make_network
+    from lib.datasets import make_data_loader
+    from lib.utils.net_utils import load_network
+    import tqdm
+    import torch
+    from lib.visualizers import make_visualizer
+
+    network = make_network(cfg).cuda()
+    network.eval()
+
+    data_loader = make_data_loader(cfg, is_train=False)
+    visualizer = make_visualizer(cfg)
+    for batch in tqdm.tqdm(data_loader):
+        for k in batch:
+            if k != 'meta':
+                batch[k] = batch[k].cuda()
+        with torch.no_grad():
+            output = network(batch['inp'], batch)
+        visualizer.visualize(output, batch)
 
 
 if __name__ == '__main__':

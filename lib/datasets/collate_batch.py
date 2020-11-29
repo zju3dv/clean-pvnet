@@ -5,6 +5,7 @@ import numpy as np
 
 def ct_collator(batch):
     ret = {'inp': default_collate([b['inp'] for b in batch])}
+    ret.update({'img': default_collate([b['img'] for b in batch])})
 
     meta = default_collate([b['meta'] for b in batch])
     ret.update({'meta': meta})

@@ -141,6 +141,12 @@ If setup correctly, the output will look like
 
 ![cat](./assets/cat.png)
 
+4. Visualize with detector:
+
+   ```
+   python run.py --type detector_pvnet --cfg_file configs/ct_linemod.yaml
+   ```
+
 ### Visualization on Tless
 
 Visualize:
