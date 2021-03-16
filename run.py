@@ -243,6 +243,34 @@ def run_detector_pvnet():
             output = network(batch['inp'], batch)
         visualizer.visualize(output, batch)
 
+def run_demo():
+    from lib.datasets import make_data_loader
+    from lib.visualizers import make_visualizer
+    import tqdm
+    import torch
+    from lib.networks import make_network
+    from lib.utils.net_utils import load_network
+    import glob
+    from PIL import Image
+
+    torch.manual_seed(0)
+    meta = np.load(os.path.join(cfg.demo_path, 'meta.npy'), allow_pickle=True).item()
+    demo_images = glob.glob(cfg.demo_path + '/*jpg')
+
+    network = make_network(cfg).cuda()
+    load_network(network, cfg.model_dir, epoch=cfg.test.epoch)
+    network.eval()
+
+    visualizer = make_visualizer(cfg)
+
+    mean, std = np.array([0.485, 0.456, 0.406]), np.array([0.229, 0.224, 0.225])
+    for demo_image in demo_images:
+        demo_image = np.array(Image.open(demo_image)).astype(np.float32)
+        inp = (((demo_image/255.)-mean)/std).transpose(2, 0, 1).astype(np.float32)
+        inp = torch.Tensor(inp[None]).cuda()
+        with torch.no_grad():
+            output = network(inp)
+        visualizer.visualize_demo(output, inp, meta)
 
 if __name__ == '__main__':
     globals()['run_'+args.type]()

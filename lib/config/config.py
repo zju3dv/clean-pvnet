@@ -31,6 +31,7 @@ cfg.ep_iter = -1
 cfg.save_ep = 5
 cfg.eval_ep = 5
 
+cfg.demo_path = 'demo_images/cat'
 
 # -----------------------------------------------------------------------------
 # train
