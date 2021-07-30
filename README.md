@@ -46,6 +46,10 @@ Another way is to use the following commands.
     python setup.py build_ext --inplace
     cd ../fps
     python setup.py build_ext --inplace
+    
+    # If you want to run PVNet with a detector
+    cd ../dcn_v2
+    python setup.py build_ext --inplace
 
     # If you want to use the uncertainty-driven PnP
     cd ../uncertainty_pnp
