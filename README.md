@@ -40,9 +40,7 @@ Another way is to use the following commands.
     ROOT=/path/to/clean-pvnet
     cd $ROOT/lib/csrc
     export CUDA_HOME="/usr/local/cuda-9.0"
-    cd dcn_v2
-    python setup.py build_ext --inplace
-    cd ../ransac_voting
+    cd ransac_voting
     python setup.py build_ext --inplace
     cd ../nn
     python setup.py build_ext --inplace
