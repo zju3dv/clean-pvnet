@@ -26,9 +26,13 @@ def uncertainty_pnp(points_2d, weights_2d, points_3d, camera_matrix):
 
     idxs = np.argsort(weights_2d[:, 0]+weights_2d[:, 1])[-4:]
 
-    _, R_exp, t = cv2.solvePnP(np.expand_dims(points_3d[idxs,:], 0),
+    flag, R_exp, t = cv2.solvePnP(np.expand_dims(points_3d[idxs,:], 0),
                              np.expand_dims(points_2d[idxs,:], 0),
                              camera_matrix, dist_coeffs, None, None, False, flags=cv2.SOLVEPNP_P3P)
+    if not flag:
+        _, R_exp, t = cv2.solvePnP(np.expand_dims(points_3d[idxs, :], 0),
+                                      np.expand_dims(points_2d[idxs, :], 0),
+                                      camera_matrix, dist_coeffs, None, None, False, flags=cv2.SOLVEPNP_EPNP)
 
     if pn == 4:
         # no other points

@@ -1,11 +1,13 @@
 import os
 
-cuda_include=os.path.join(os.environ.get('CUDA_HOME'), 'include')
-os.system('nvcc src/nearest_neighborhood.cu -c -o src/nearest_neighborhood.cu.o -x cu -Xcompiler -fPIC -O2 -arch=sm_52 -I {}'.format(cuda_include))
+cuda_include = os.path.join(os.environ.get('CUDA_HOME'), 'include')
+# cmd :
+# nvcc src/nearest_neighborhood.cu -c -o src/nearest_neighborhood.cu.obj -x cu -Xcompiler "/MD /EHsc /O2" -arch=sm_75 -I "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.5\include"
+os.system('nvcc src/nearest_neighborhood.cu -c -o src/nearest_neighborhood.cu.obj -x cu -Xcompiler "/MD /EHsc /O2" -arch=sm_75 -I "{}"'.format(cuda_include))
 
 from cffi import FFI
-ffibuilder = FFI()
 
+ffibuilder = FFI()
 
 with open(os.path.join(os.path.dirname(__file__), "src/ext.h")) as f:
     ffibuilder.cdef(f.read())
@@ -15,13 +17,12 @@ ffibuilder.set_source(
     """
     #include "src/ext.h"
     """,
-    extra_objects=['src/nearest_neighborhood.cu.o',
-                   os.path.join(os.environ.get('CUDA_HOME'),'lib64/libcudart.so')],
-    libraries=['stdc++']
+    extra_objects=['src/nearest_neighborhood.cu.obj',
+                   os.path.join(os.environ.get('CUDA_HOME'), 'lib/x64/cudart.lib')],
+    # libraries=['stdc++']
 )
-
 
 if __name__ == "__main__":
     ffibuilder.compile(verbose=True)
-    os.system("rm src/*.o")
-    os.system("rm *.o")
+    os.system("del /q src\*.obj")
+    os.system("del /q *.obj")

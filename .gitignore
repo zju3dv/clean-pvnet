@@ -5,9 +5,15 @@ __pycache__/
 *.so
 *.orig
 *.o
+*.obj
+*.dll
 *.json
 *.pth
 *.jpg
 *.ipynb
 *.npy
-
+*.lib
+*.exp
+*.ninja
+*.ninja_deps
+*.ninja_log
