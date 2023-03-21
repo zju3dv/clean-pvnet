@@ -1,3 +1,7 @@
+"""
+PVNet训练文件
+
+"""
 from lib.config import cfg, args
 from lib.networks import make_network
 from lib.train import make_trainer, make_optimizer, make_lr_scheduler, make_recorder, set_lr_scheduler

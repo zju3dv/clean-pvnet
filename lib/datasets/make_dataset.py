@@ -1,17 +1,21 @@
+"""
+"""
+
+#内置库
+import os
+import time
+#第三方库
+import numpy as np
+import imp
+import torch
+import torch.utils.data
+#个人库
 from .transforms import make_transforms
 from . import samplers
 from .dataset_catalog import DatasetCatalog
-import torch
-import torch.utils.data
-import imp
-import os
 from .collate_batch import make_collator
-import time
-import numpy as np
-
 
 torch.multiprocessing.set_sharing_strategy('file_system')
-
 
 def _dataset_factory(data_source, task):
     module = '.'.join(['lib.datasets', data_source, task])
