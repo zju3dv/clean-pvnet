@@ -17,6 +17,7 @@ diameters = {
     'phone': 20.8394
 }
 
+# linemod数据集内所有的类别(categories_names)名称
 linemod_cls_names = ['ape', 'cam', 'cat', 'duck', 'glue', 'iron', 'phone', 'benchvise', 'can', 'driller', 'eggbox', 'holepuncher', 'lamp']
 
 linemod_K = np.array([[572.4114, 0., 325.2611],

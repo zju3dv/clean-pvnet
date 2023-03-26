@@ -1,7 +1,14 @@
-from torch.utils.data.dataloader import default_collate
-import torch
-import numpy as np
+"""
+collate_batch模块
+=================
 
+自制的批数据整理器函数(collator)实例
+"""
+
+# 第三方库
+import numpy as np
+import torch
+from torch.utils.data.dataloader import default_collate
 
 def ct_collator(batch):
     ret = {'inp': default_collate([b['inp'] for b in batch])}
@@ -33,6 +40,14 @@ def ct_collator(batch):
 
 
 def pvnet_collator(batch):
+    """
+    pvnet_collator pvnet整理器,(当cfg.task为"pvnet"被调用)
+
+    :param batch: 批数据
+    :type batch: list
+    :return: 整理后的批数据(不同数据的同种属性被整理到同一list下)
+    :rtype: dict
+    """    
     if 'pose_test' not in batch[0]['meta']:
         return default_collate(batch)
 
@@ -51,7 +66,15 @@ _collators = {
 
 
 def make_collator(cfg):
-    if cfg.task in _collators:
+    """
+    make_collator 生成批数据整理器(collator)
+
+    :param cfg: 系统配置管理器
+    :type cfg: CfgNode类
+    :return: 批数据整理器
+    :rtype: torch.utils.data.dataloader.default_collate函数或自制的整理器函数
+    """
+    if cfg.task in _collators:          # 当任务(cfg.task)为"ct"或"pvnet"时，返回自制的整理器函数
         return _collators[cfg.task]
-    else:
+    else:                               # 否则，返回默认的整理器函数
         return default_collate

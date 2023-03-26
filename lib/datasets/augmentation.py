@@ -1,9 +1,18 @@
+"""
+augmentation模块
+==================
+
+本模块实现了一些数据增强(主要是几何变换)的常用函数
+"""
+
+# 标准库
+import math
+
+# 第三方库
 import cv2
 import numpy as np
-import math
-import torchvision.transforms as transforms
 from PIL import Image
-
+import torchvision.transforms as transforms
 
 def resize_keep_aspect_ratio(img, imsize, intp_type=cv2.INTER_LINEAR):
     h, w = img.shape[0], img.shape[1]
@@ -47,6 +56,22 @@ def resize_keep_aspect_ratio(img, imsize, intp_type=cv2.INTER_LINEAR):
 
 
 def rotate(img, mask, hcoords, rot_ang_min, rot_ang_max):
+    """
+    rotate _summary_
+
+    :param img: _description_
+    :type img: _type_
+    :param mask: _description_
+    :type mask: _type_
+    :param hcoords: _description_
+    :type hcoords: _type_
+    :param rot_ang_min: _description_
+    :type rot_ang_min: _type_
+    :param rot_ang_max: _description_
+    :type rot_ang_max: _type_
+    :return: _description_
+    :rtype: _type_
+    """
     h, w = img.shape[0], img.shape[1]
     degree = np.random.uniform(rot_ang_min, rot_ang_max)
     R = cv2.getRotationMatrix2D((w / 2, h / 2), degree, 1)
@@ -58,14 +83,30 @@ def rotate(img, mask, hcoords, rot_ang_min, rot_ang_max):
 
 
 def rotate_instance(img, mask, hcoords, rot_ang_min, rot_ang_max):
+    """
+    rotate_instance 以待检测目标中心为原点，随机选取角度degree∈[rot_ang_min, rot_ang_max)，对mask, img, hcoords进行旋转
+
+    :param img: 输入图像
+    :type img: narray
+    :param mask: 图像掩码
+    :type mask: narray
+    :param hcoords: 2D关键点的齐次坐标
+    :type hcoords: narray(9*3)
+    :param rot_ang_min: 旋转角度的下限
+    :type rot_ang_min: int
+    :param rot_ang_max: 旋转角度的上限
+    :type rot_ang_max: int
+    :return: 图像，掩码，齐次坐标
+    :rtype: tuple(img, mask, hcoords)
+    """    
     h, w = img.shape[0], img.shape[1]
-    degree = np.random.uniform(rot_ang_min, rot_ang_max)
-    hs, ws = np.nonzero(mask)
-    R = cv2.getRotationMatrix2D((np.mean(ws), np.mean(hs)), degree, 1)
-    mask = cv2.warpAffine(mask, R, (w, h), flags=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
-    img = cv2.warpAffine(img, R, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
+    degree = np.random.uniform(rot_ang_min, rot_ang_max)    # 随机选取旋转角度
+    hs, ws = np.nonzero(mask)                               # 获取掩码中非零元素索引[hs,ws]
+    R = cv2.getRotationMatrix2D((np.mean(ws), np.mean(hs)), degree, 1)  # 以目标中心为原点生成角度为degree的旋转矩阵
+    mask = cv2.warpAffine(mask, R, (w, h), flags=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT, borderValue=0) # 旋转mask，最近点插值，边界填充为0/黑色
+    img = cv2.warpAffine(img, R, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=0) # 旋转img，线性插值，边界填充为0/黑色
     last_row = np.asarray([[0, 0, 1]], np.float32)
-    hcoords = np.matmul(hcoords, np.concatenate([R, last_row], 0).transpose())
+    hcoords = np.matmul(hcoords, np.concatenate([R, last_row], 0).transpose()) # 旋转特征点，等价于(R|1)hcoords^T
     return img, mask, hcoords
 
 
@@ -124,31 +165,67 @@ def crop_or_padding(img, mask, hcoords, hratio, wratio):
 
 
 def crop_or_padding_to_fixed_size_instance(img, mask, hcoords, th, tw, overlap_ratio=0.5):
+    """
+    crop_or_padding_to_fixed_size_instance 将输入图像(img)剪裁(crop)或填充(padding)至指定大小(th, tw)，
+    图像中存在目标实例。
+
+    :param img: 输入图像
+    :type img: narray
+    :param mask: 掩码
+    :type mask: narray
+    :param hcoords: 齐次坐标
+    :type hcoords: narray
+    :param th: 输出图像/掩码的高度
+    :type th: int
+    :param tw: 输出图像/掩码的宽度
+    :type tw: int
+    :param overlap_ratio: 重叠率(输出图像中目标区域相较于原区域的最小占比), 默认值为0.5
+    :type overlap_ratio: float
+    :return: 图像，掩码，齐次坐标
+    :rtype: tuple(img, mask, hcoords)
+
+    .. note:: 1. 该函数不需要保证对图像长度和宽度方向同时进行剪裁和填充(即可指定长度方向为剪裁，宽度方向为填充，反之亦然)。
+              2. 原函数计算起始剪裁位置取值范围的公式有误，进行了修改。
+
+    .. warning:: 当使用该函数剪裁图像时，需保证``th(tw) > overlap_ratio*fh(fw)``(fh，fw为原图像中目标区域的高度和宽度),
+                 否则会使函数``numpy.random.randint(low,high)``报错(因为low>=hogh)。
+    """
     h, w, _ = img.shape
-    hs, ws = np.nonzero(mask)
+    hs, ws = np.nonzero(mask)   # numpy.nonzero返回数组非零元素的下标(以维度分组)，与numpy.argwhere区分
 
     hmin, hmax = np.min(hs), np.max(hs)
     wmin, wmax = np.min(ws), np.max(ws)
     fh, fw = hmax - hmin, wmax - wmin
-    hpad, wpad = th >= h, tw >= w
+    hpad, wpad = th >= h, tw >= w       # 若目标(输出)图像的高/宽>=原图像的高/宽，则说明要对图像进行填充，置填充标志为True
 
+    """ 修改 
     hrmax = int(min(hmin + overlap_ratio * fh, h - th))  # h must > target_height else hrmax<0
     hrmin = int(max(hmin + overlap_ratio * fh - th, 0))
     wrmax = int(min(wmin + overlap_ratio * fw, w - tw))  # w must > target_width else wrmax<0
     wrmin = int(max(wmin + overlap_ratio * fw - tw, 0))
+    """
+    # 确定剪裁起始位置的取值范围，以保证剪裁后的图像至少包含原目标区域的overlap_ratio的大小的部分(警告：使用时需保证th>overlap_ratio*fh，否则会出现hrmin>=hrmax)
+    hrmax = int(min(hmax - overlap_ratio * fh, h - th))
+    hrmin = int(max(hmin + overlap_ratio * fh - th, 0))
+    wrmax = int(min(wmax - overlap_ratio * fw, w - tw))
+    wrmin = int(max(wmin + overlap_ratio * fw - tw, 0))
 
+    # 随机确定起始剪裁位置(若是填充图片，则起始位置为0)
     hbeg = 0 if hpad else np.random.randint(hrmin, hrmax)
     hend = hbeg + th
     wbeg = 0 if wpad else np.random.randint(wrmin,
                                             wrmax)  # if pad then [0,wend] will larger than [0,w], indexing it is safe
     wend = wbeg + tw
 
+    # 获得剪裁后的img, mask
     img = img[hbeg:hend, wbeg:wend]
     mask = mask[hbeg:hend, wbeg:wend]
 
+    # 获得关键点在剪裁图像上的齐次坐标
     hcoords[:, 0] -= wbeg * hcoords[:, 2]
     hcoords[:, 1] -= hbeg * hcoords[:, 2]
 
+    # 若是填充图片(增大Δx)，则分别在图像两端填充长度为Δx/2的零
     if hpad or wpad:
         nh, nw, _ = img.shape
         new_img = np.zeros([th, tw, 3], dtype=img.dtype)
@@ -168,6 +245,20 @@ def crop_or_padding_to_fixed_size_instance(img, mask, hcoords, th, tw, overlap_r
 
 
 def crop_or_padding_to_fixed_size(img, mask, th, tw):
+    """
+    crop_or_padding_to_fixed_size 将图像剪裁或填充至指定大小，图像中不存在目标实例。
+
+    :param img: 输入图像
+    :type img: narray
+    :param mask: 掩码
+    :type mask: narray
+    :param th: 输出图像的高度
+    :type th: int
+    :param tw: 输出图像的宽度
+    :type tw: int
+    :return: 图像，掩码
+    :rtype: tuple(img, mask)
+    """
     h, w, _ = img.shape
     hpad, wpad = th >= h, tw >= w
 
@@ -265,30 +356,46 @@ def compute_resize_range(mask, hmin, hmax, wmin, wmax):
 #### higher level api #####
 def crop_resize_instance_v1(img, mask, hcoords, imheight, imwidth,
                             overlap_ratio=0.5, ratio_min=0.8, ratio_max=1.2):
-    '''
-
+    """
+    crop_resize_instance_v1 将图像缩放至指定大小(imheight, imweidth)，
+    同时随机选取比率ratio∈[ratio_min, ratio_max)对图像内容进行剪裁或填充。
     crop a region with [imheight*resize_ratio,imwidth*resize_ratio]
     which at least overlap with foreground bbox with overlap
-    :param img:
-    :param mask:
-    :param hcoords:
-    :param imheight:
-    :param imwidth:
-    :param overlap_ratio:
-    :param ratio_min:
-    :param ratio_max:
-    :return:
-    '''
-    resize_ratio = np.random.uniform(ratio_min, ratio_max)
+
+    :param img: 输入图像
+    :type img: narray
+    :param mask: 掩码
+    :type mask: narray
+    :param hcoords: 齐次坐标
+    :type hcoords: narray
+    :param imheight: 输出图像的高度
+    :type imheight: int
+    :param imwidth: 输出图像的宽度
+    :type imwidth: int
+    :param overlap_ratio: 重叠率, 默认值为0.5
+    :type overlap_ratio: float
+    :param ratio_min: 最小剪裁率, 默认值为0.8
+    :type ratio_min: float
+    :param ratio_max: 最大填充率, 默认值1.2
+    :type ratio_max: float
+    :return: 图像，掩码，齐次坐标
+    :rtype: tuple(img, mask, hcoords)
+    """    
+
+    # 确定图像剪裁或填充的大小
+    resize_ratio = np.random.uniform(ratio_min, ratio_max)  # 随机选取剪裁(填充)率(resize_ratio)∈[ratio_min, ratio_max)
     target_height = int(imheight * resize_ratio)
     target_width = int(imwidth * resize_ratio)
 
+    # 对图像内容进行剪裁或填充
     img, mask, hcoords = crop_or_padding_to_fixed_size_instance(
         img, mask, hcoords, target_height, target_width, overlap_ratio)
 
+    # 将图像放大或缩小至(imwidth,imheight)，线性插值
     img = cv2.resize(img, (imwidth, imheight), interpolation=cv2.INTER_LINEAR)
     mask = cv2.resize(mask, (imwidth, imheight), interpolation=cv2.INTER_NEAREST)
 
+    # 调整齐次坐标
     hcoords[:, 0] = hcoords[:, 0] / resize_ratio
     hcoords[:, 1] = hcoords[:, 1] / resize_ratio
 

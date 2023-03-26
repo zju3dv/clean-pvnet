@@ -1,5 +1,5 @@
 """
-PVNet训练文件
+PVNet训练时启动文件
 
 """
 from lib.config import cfg, args

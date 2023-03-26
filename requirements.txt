@@ -1,5 +1,5 @@
 yacs==0.1.4
-numpy==1.22.0
+numpy==1.21.6 # revised 1.22.0
 torchvision==0.2.1
 opencv-python==3.4.2.17
 tqdm==4.28.1

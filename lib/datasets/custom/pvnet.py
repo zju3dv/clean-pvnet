@@ -1,15 +1,23 @@
-import torch.utils.data as data
-from pycocotools.coco import COCO
-import numpy as np
+"""
+
+"""
+
+# 标准库
 import os
+import random
+
+# 第三方库
+import torch
+import torch.utils.data as data
+import numpy as np
 from PIL import Image
+from pycocotools.coco import COCO
+
+# 自建库
+from lib.config import cfg
 from lib.utils.pvnet import pvnet_data_utils, pvnet_linemod_utils, visualize_utils
 from lib.utils.linemod import linemod_config
 from lib.datasets.augmentation import crop_or_padding_to_fixed_size, rotate_instance, crop_resize_instance_v1
-import random
-import torch
-from lib.config import cfg
-
 
 class Dataset(data.Dataset):
 

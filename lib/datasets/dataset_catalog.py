@@ -1,10 +1,23 @@
 """
+dataset_catalog模块
+=====================
 
+本模块通过DatasetCatalog类来管理不同数据集(Linemod, Tless, custom, etc.)
+的路径信息：
+
+- 数据集id：即本目录内的custom, linemod等文件夹
+- 原始数据文件路径：即img图片在本项目中的路径信息
+- 标注文件路径：即annotation文件在本项目中的路径信息
+
+并可以通过数据集的标识符，使用类的静态函数get()获取指定数据集的路径信息。
 """
 
 from lib.config import cfg
 
 class DatasetCatalog(object):
+    """
+    DatasetCatalog 数据集的路径信息管理器
+    """
     dataset_attrs = {
         'LinemodTest': {
             'id': 'linemod',
@@ -91,5 +104,13 @@ class DatasetCatalog(object):
 
     @staticmethod
     def get(name):
+        """
+        get 获取指定数据集的路径信息
+
+        :param name: 数据集的标识符/名字
+        :type name: str
+        :return: 数据集的路径信息
+        :rtype: dict
+        """
         attrs = DatasetCatalog.dataset_attrs[name]
         return attrs.copy()
