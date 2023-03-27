@@ -12,6 +12,7 @@ config子模块
 
 # 标准库
 import os
+import sys
 import argparse
 
 #第三方库
@@ -184,15 +185,19 @@ def make_cfg(args):
     parse_cfg(cfg, args)
     return cfg
 
+PATH_SPHINX = "/home/administrator/anaconda3/envs/pvnet/bin/sphinx-build"
 
-# 利用argparse对命令行参数进行解析
-parser = argparse.ArgumentParser()
-parser.add_argument("--cfg_file", default="configs/default.yaml", type=str)         # "--cfg_file" 配置文件(.yaml)的路径（可选参数）
-parser.add_argument('--test', action='store_true', dest='test', default=False)      # "--test" 
-parser.add_argument("--type", type=str, default="")                                 # "--type" 指定要训练的数据集(linemod, custom, etc.)或要进行的任务(visualize, evaluate, etc.)
-parser.add_argument('--det', type=str, default='')                                  # "--det" 
-parser.add_argument("opts", default=None, nargs=argparse.REMAINDER)                 # "--opts" 
-args = parser.parse_args()
-if len(args.type) > 0:
-    cfg.task = "run"
-cfg = make_cfg(args)
+if sys.argv[0] == PATH_SPHINX:
+    args = argparse.Namespace()
+else:
+    # 利用argparse对命令行参数进行解析
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--cfg_file", default="configs/default.yaml", type=str)         # "--cfg_file" 配置文件(.yaml)的路径（可选参数）
+    parser.add_argument('--test', action='store_true', dest='test', default=False)      # "--test" 
+    parser.add_argument("--type", type=str, default="")                                 # "--type" 指定要训练的数据集(linemod, custom, etc.)或要进行的任务(visualize, evaluate, etc.)
+    parser.add_argument('--det', type=str, default='')                                  # "--det" 
+    parser.add_argument("opts", default=None, nargs=argparse.REMAINDER)                 # "--opts"
+    args = parser.parse_args()
+    if len(args.type) > 0:
+        cfg.task = "run"
+    cfg = make_cfg(args)
