@@ -1,11 +1,19 @@
+"""
+make_network模块
+================
+"""
+# 标准库
+import os
+import imp
+# 自建库
 from .resnet import get_pose_net as get_res
 # disable dcn temporarily
 #from .pose_dla_dcn import get_pose_net as get_dla_dcn
 #from .resnet_dcn import get_pose_net as get_res_dcn
 from .linear_model import get_linear_model
 from .hourglass import get_large_hourglass_net as get_hg
-import os
-import imp
+
+
 
 
 _network_factory = {
@@ -18,6 +26,14 @@ _network_factory = {
 
 
 def get_network(cfg):
+    """
+    get_network _summary_
+
+    :param cfg: _description_
+    :type cfg: _type_
+    :return: _description_
+    :rtype: _type_
+    """
     arch = cfg.network
     heads = cfg.heads
     head_conv = cfg.head_conv
@@ -29,6 +45,14 @@ def get_network(cfg):
 
 
 def make_network(cfg):
+    """
+    make_network _summary_
+
+    :param cfg: _description_
+    :type cfg: _type_
+    :return: _description_
+    :rtype: _type_
+    """
     module = '.'.join(['lib.networks', cfg.task])
     path = os.path.join('lib/networks', cfg.task, '__init__.py')
     return imp.load_source(module, path).get_network(cfg)

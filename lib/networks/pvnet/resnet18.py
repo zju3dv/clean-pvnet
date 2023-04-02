@@ -1,6 +1,12 @@
-from torch import nn
+"""
+resnet18模块
+============
+"""
+# 第三方库
 import torch
+from torch import nn
 from torch.nn import functional as F
+# 自建库
 from .resnet import resnet18
 from lib.csrc.ransac_voting.ransac_voting_gpu import ransac_voting_layer, ransac_voting_layer_v3, estimate_voting_distribution_with_mean
 from lib.config import cfg

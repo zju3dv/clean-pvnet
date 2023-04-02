@@ -1,9 +1,12 @@
-import torch.nn as nn
+"""
+"""
+# 标准库
 import math
-import torch.utils.model_zoo as model_zoo
+# 第三方库
 import numpy as np
 import torch
-
+import torch.nn as nn
+import torch.utils.model_zoo as model_zoo
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152']
