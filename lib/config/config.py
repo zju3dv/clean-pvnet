@@ -185,6 +185,7 @@ def make_cfg(args):
     parse_cfg(cfg, args)
     return cfg
 
+# 兼容shpinx用
 PATH_SPHINX = "/home/administrator/anaconda3/envs/pvnet/bin/sphinx-build"
 
 if sys.argv[0] == PATH_SPHINX:
