@@ -77,8 +77,8 @@ Download datasets which are formatted for this project:
 2. [linemod_orig](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/EaoGIPguY3FAgrFKKhi32fcB_nrMcNRm8jVCZQd7G_-Wbg?e=ig4aHk): The dataset includes the depth for each image.
 3. [occlusion linemod](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/ESXrP0zskd5IvvuvG3TXD-4BMgbDrHZ_bevurBrAcKE5Dg?e=r0EgoA)
 4. [truncation linemod](https://1drv.ms/u/s!AtZjYZ01QjphfuDICdni1IIM4SE): Check [TRUNCATION_LINEMOD.md](TRUNCATION_LINEMOD.md) for the information about the Truncation LINEMOD dataset.
-5. [Tless](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/EsKEY3aHNElEjaKbhCJVyQgBUGTlprdcyF5sgLjEv8J8TQ?e=NbJpkM): `cat tlessa* | tar xvf - -C .`.
-6. [Tless cache data](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/EWf-M5HRcH1JnBNN9yE1a84BYNAU7x1DoU_-W3Onl5Xxog?e=HZSrMu): It is used for training and testing on Tless.
+5. [Tless](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/EjoUiAwfPOhGgFGPnJANDqoBLxnUAc7DO77voz6-KVp5Wg?e=6UGB3p): `cat tlessa* | tar xvf - -C .`.
+6. [Tless cache data](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/EjoUiAwfPOhGgFGPnJANDqoBLxnUAc7DO77voz6-KVp5Wg?e=6UGB3p): It is used for training and testing on Tless.
 7. [SUN2012pascalformat](http://groups.csail.mit.edu/vision/SUN/releases/SUN2012pascalformat.tar.gz)
 
 ## Testing
@@ -113,7 +113,7 @@ Take the testing on `cat` as an example.
 
 ### Testing on Tless
 
-We provide the pretrained models of objects on Tless, which can be found at [here](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/EbcvcBH-eFJDm7lFqillf_oB8Afr2d6vtELNn0tUUk439g?e=bNZaDc).
+We provide the pretrained models of objects on Tless, which can be found at [here](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/EjoUiAwfPOhGgFGPnJANDqoBLxnUAc7DO77voz6-KVp5Wg?e=6UGB3p).
 
 1. Download the pretrained models and put them to `$ROOT/data/model/pvnet/`.
 2. Test:
