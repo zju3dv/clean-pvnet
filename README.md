@@ -73,9 +73,9 @@ Another way is to use the following commands.
     ```
 
 Download datasets which are formatted for this project:
-1. [linemod](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/EXK2K0B-QrNPi8MYLDFHdB8BQm9cWTxRGV9dQgauczkVYQ?e=beftUz)
-2. [linemod_orig](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/EaoGIPguY3FAgrFKKhi32fcB_nrMcNRm8jVCZQd7G_-Wbg?e=ig4aHk): The dataset includes the depth for each image.
-3. [occlusion linemod](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/ESXrP0zskd5IvvuvG3TXD-4BMgbDrHZ_bevurBrAcKE5Dg?e=r0EgoA)
+1. [linemod](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/Eh27tt7m6fJNgcCKMp9BzjABRzJTju6bT2GIZzcIVGu9WA?e=vURdqJ)
+2. [linemod_orig](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/Eh27tt7m6fJNgcCKMp9BzjABRzJTju6bT2GIZzcIVGu9WA?e=vURdqJ): The dataset includes the depth for each image.
+3. [occlusion linemod](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/Eh27tt7m6fJNgcCKMp9BzjABRzJTju6bT2GIZzcIVGu9WA?e=vURdqJ)
 4. [truncation linemod](https://1drv.ms/u/s!AtZjYZ01QjphfuDICdni1IIM4SE): Check [TRUNCATION_LINEMOD.md](TRUNCATION_LINEMOD.md) for the information about the Truncation LINEMOD dataset.
 5. [Tless](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/EjoUiAwfPOhGgFGPnJANDqoBLxnUAc7DO77voz6-KVp5Wg?e=6UGB3p): `cat tlessa* | tar xvf - -C .`.
 6. [Tless cache data](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/EjoUiAwfPOhGgFGPnJANDqoBLxnUAc7DO77voz6-KVp5Wg?e=6UGB3p): It is used for training and testing on Tless.
