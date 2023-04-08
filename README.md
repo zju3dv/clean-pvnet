@@ -151,7 +151,7 @@ If setup correctly, the output will look like
 
 4. Visualize with a detector:
 
-   Download the pretrained models  [here](https://zjueducn-my.sharepoint.com/:u:/g/personal/haotongl_zju_edu_cn/EZxeOruBmGZLr8vldbB381ABo4cpI1VsE4HhqjizMw1Opw?e=OUGtql) and put them to `$ROOT/data/model/pvnet/pvnet_cat/59.pth` and `$ROOT/data/model/ct/ct_cat/9.pth`
+   Download the pretrained models [here](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/Eh27tt7m6fJNgcCKMp9BzjABRzJTju6bT2GIZzcIVGu9WA?e=vURdqJ) and put them to `$ROOT/data/model/pvnet/pvnet_cat/59.pth` and `$ROOT/data/model/ct/ct_cat/9.pth`
    
    ```
    python run.py --type detector_pvnet --cfg_file configs/ct_linemod.yaml
