@@ -55,5 +55,6 @@ def cm_degree_5(pose_pred, pose_targets):
     rotation_diff = np.dot(pose_pred[:, :3], pose_targets[:, :3].T)
     trace = np.trace(rotation_diff)
     trace = trace if trace <= 3 else 3
+    trace = trace if trace >= -1 else -1 # https://github.com/zju3dv/clean-pvnet/issues/250
     angular_distance = np.rad2deg(np.arccos((trace - 1.) / 2.))
     return translation_distance, angular_distance
