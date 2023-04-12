@@ -23,6 +23,7 @@ _network_factory = {
     'linear': get_linear_model,
     'hg': get_hg
 }
+"""network工厂"""
 
 
 def get_network(cfg):
@@ -46,12 +47,12 @@ def get_network(cfg):
 
 def make_network(cfg):
     """
-    make_network _summary_
+    make_network 根据项目的任务类型(pvnet,ct_pvnet,ct),来获取特定的神经网络模型
 
-    :param cfg: _description_
-    :type cfg: _type_
-    :return: _description_
-    :rtype: _type_
+    :param cfg: 项目配置管理器
+    :type cfg: CfgNode
+    :return: 指定的神经网络模型实例
+    :rtype: torch.nn.Module
     """
     module = '.'.join(['lib.networks', cfg.task])
     path = os.path.join('lib/networks', cfg.task, '__init__.py')

@@ -10,9 +10,6 @@ transforms模块
 - RandomBlur:随机滤波（预处理）。
 
 四个函数基于Compose类封装在一起，对输入图像的执行顺序为：随机滤波(RandomBlur, 仅训练时使用)、随机颜色空间变换(ColorJitter, 仅训练时使用)、归一化(ToTensor)、标准化(Normalize,均值标准差已预先设定)处理。
-
-.. note:: 修改了本模块Normalize类的部分内容：将PIL.Image转换为BGR格式
-
 """
 
 # 标准库
@@ -98,7 +95,7 @@ class ToTensor(object):
 
 class Normalize(object):
     """
-    Normalize 将图像标准化处理，并转化为BGR格式(可选)。
+    Normalize 将图像标准化处理,并将图像的通道放在第一个维度,(H,W,C)->(C,H,W)。
 
         :param mean: 图像均值
         :type mean: _type_
@@ -138,9 +135,9 @@ class Normalize(object):
         # 标准化处理
         img -= self.mean
         img /= self.std
-        if self.to_bgr:     # 转化为BGR格式
-            #img = img.transpose(2, 0, 1).astype(np.float32)
-            img = img.transpose(2, 1, 0).astype(np.float32)
+        if self.to_bgr:     # (H,W,C)->(C,H,W)
+            img = img.transpose(2, 0, 1).astype(np.float32)
+            # img = img.transpose(2, 1, 0).astype(np.float32)
         return img, kpts, mask
 
 
