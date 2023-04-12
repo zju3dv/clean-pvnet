@@ -47,6 +47,7 @@ handle_custom_dataset模块
 # 标准库
 import os
 import json
+from pathlib import Path
 # 第三方库
 import tqdm
 import numpy as np
@@ -111,7 +112,7 @@ def get_model_corners(model):
     return corners_3d
 
 
-def record_ann(model_meta, img_id, ann_id, images, annotations):
+def record_ann(path_list, model_meta, img_id, ann_id, images, annotations):
     """
     record_ann 记录数据集的image和annotation信息
 
@@ -138,10 +139,8 @@ def record_ann(model_meta, img_id, ann_id, images, annotations):
     rgb_dir = os.path.join(data_root, 'rgb')
     mask_dir = os.path.join(data_root, 'mask')
 
-    inds = range(len(os.listdir(rgb_dir)))
-
-    for ind in tqdm.tqdm(inds):
-        rgb_path = os.path.join(rgb_dir, '{}.jpg'.format(ind))
+    for path in tqdm.tqdm(path_list):
+        rgb_path = os.path.join(rgb_dir, '/'.join(path.split('/')[-2:]))
 
         # 记录当前图片的image信息
         rgb = Image.open(rgb_path)
@@ -151,13 +150,13 @@ def record_ann(model_meta, img_id, ann_id, images, annotations):
         images.append(info)
 
         # 计算3D坐标的2D投影
-        pose_path = os.path.join(pose_dir, 'pose{}.npy'.format(ind))
+        pose_path = os.path.join(pose_dir, ('/'.join(path.split('/')[-2:]))[:-3]+'npy')
         pose = np.load(pose_path)  # 从相机坐标系到模型当前位置的位姿变换矩阵
         corner_2d = base_utils.project(corner_3d, K, pose)  # 计算当前图像中的角点坐标
         center_2d = base_utils.project(center_3d[None], K, pose)[0]  # 计算当前图像中的中心点坐标
         fps_2d = base_utils.project(fps_3d, K, pose)  # 计算当前图像中的特征点坐标
 
-        mask_path = os.path.join(mask_dir, '{}.png'.format(ind))
+        mask_path = os.path.join(mask_dir, ('/'.join(path.split('/')[-2:]))[:-3]+'png')
 
         # 记录当前图片的annotation信息
         ann_id += 1
@@ -167,13 +166,13 @@ def record_ann(model_meta, img_id, ann_id, images, annotations):
         anno.update({'fps_3d': fps_3d.tolist(), 'fps_2d': fps_2d.tolist()})
         anno.update({'K': K.tolist(), 'pose': pose.tolist()})
         anno.update({'data_root': rgb_dir})
-        anno.update({'type': 'real', 'cls': 'cat'})
+        anno.update({'type': 'render', 'cls': 'charger'})
         annotations.append(anno)
 
     return img_id, ann_id
 
 
-def custom_to_coco(data_root):
+def custom_to_coco(data_root='data/custom',path_list=[],kind='train'):
     """
     custom_to_coco 处理数据集,并生成PVNet需要的信息文件
 
@@ -207,11 +206,11 @@ def custom_to_coco(data_root):
     annotations = []
     
     # 生成PVNet需要的相关信息:images(图像信息),annotations(标注信息),categories(类别信息)
-    img_id, ann_id = record_ann(model_meta, img_id, ann_id, images, annotations)
-    categories = [{'supercategory': 'none', 'id': 1, 'name': 'cat'}]
+    img_id, ann_id = record_ann(path_list, model_meta, img_id, ann_id, images, annotations)
+    categories = [{'supercategory': 'none', 'id': 1, 'name': 'charger'}]
     instance = {'images': images, 'annotations': annotations, 'categories': categories}
 
     # 将数据集的信息写入到数据集目录下的train.json文件内
-    anno_path = os.path.join(data_root, 'train.json')
+    anno_path = os.path.join(data_root, kind+'.json')
     with open(anno_path, 'w') as f:
         json.dump(instance, f)

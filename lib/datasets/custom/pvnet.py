@@ -19,6 +19,21 @@ from lib.utils.pvnet import pvnet_data_utils, pvnet_linemod_utils, visualize_uti
 from lib.utils.linemod import linemod_config
 from lib.datasets.augmentation import crop_or_padding_to_fixed_size, rotate_instance, crop_resize_instance_v1
 
+# from yacs.config import CfgNode as CN
+# cfg = CN()
+# cfg.train = CN()
+# cfg.train.affine_rate = 0.
+# cfg.train.cropresize_rate = 0.
+# cfg.train.rotate_rate = 0.
+# cfg.train.rotate_min = -30
+# cfg.train.rotate_max = 30
+
+# cfg.train.overlap_ratio = 0.8
+# cfg.train.resize_ratio_min = 0.8
+# cfg.train.resize_ratio_max = 1.2
+
+
+
 class Dataset(data.Dataset):
 
     def __init__(self, ann_file, data_root, split, transforms=None):
@@ -40,8 +55,10 @@ class Dataset(data.Dataset):
         inp = Image.open(path)
         kpt_2d = np.concatenate([anno['fps_2d'], [anno['center_2d']]], axis=0)
 
-        cls_idx = linemod_config.linemod_cls_names.index(anno['cls']) + 1
-        mask = pvnet_data_utils.read_linemod_mask(anno['mask_path'], anno['type'], cls_idx)
+        # REVISE: custom dataset has only render image and only one category, so it don't need cls_idx 
+        # cls_idx = linemod_config.linemod_cls_names.index(anno['cls']) + 1
+        # mask = pvnet_data_utils.read_linemod_mask(anno['mask_path'], anno['type'], cls_idx)
+        mask = np.asarray(Image.open(anno['mask_path'])).astype(np.uint8)
 
         return inp, kpt_2d, mask
 

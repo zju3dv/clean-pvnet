@@ -139,8 +139,8 @@ class Normalize(object):
         img -= self.mean
         img /= self.std
         if self.to_bgr:     # 转化为BGR格式
-            #img = img.transpose(2, 0, 1).astype(np.float32)
-            img = img.transpose(2, 1, 0).astype(np.float32)
+            img = img.transpose(2, 0, 1).astype(np.float32)
+            # img = img.transpose(2, 1, 0).astype(np.float32)
         return img, kpts, mask
 
 
