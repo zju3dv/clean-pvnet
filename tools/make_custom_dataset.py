@@ -9,7 +9,7 @@ from tqdm import tqdm
 from pycocotools.coco import COCO
 # personal lib
 from lib.utils.linemod.opengl_renderer import OpenGLRenderer
-from tools.handle_custom_dataset import sample_fps_points, custom_to_coco
+from .handle_custom_dataset import sample_fps_points, custom_to_coco
 
 class BackImg:
     def __init__(self,root='data/custom/background',rand_seed=1234,ratio=0.6,img_size=(640,480)) -> None:
@@ -131,10 +131,10 @@ def make_img(root='data/custom',back_root='data/custom/background'):
 
 
 def make_dataset(root='data/custom',back_root='data/custom/background'):
-    # background = BackImg()
-    # background.alloc()
-    # make_img(root,back_root)
-    # sample_fps_points(root)
+    background = BackImg()
+    background.alloc()
+    make_img(root,back_root)
+    sample_fps_points(root)
 
     for file in [i for i in Path(back_root).iterdir() if i.is_file()]:
         path_list = file.read_text().split('\n')
