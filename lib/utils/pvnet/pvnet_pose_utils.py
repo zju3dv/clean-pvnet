@@ -40,9 +40,16 @@ def pnp(points_3d, points_2d, camera_matrix, method=cv2.SOLVEPNP_ITERATIVE):
 
 def project(xyz, K, RT):
     """
-    xyz: [N, 3]
-    K: [3, 3]
-    RT: [3, 4]
+    project 将世界坐标系中的坐标xyz转换到图像坐标系中,并返回图像坐标xy
+
+    :param xyz: 世界坐标[N, 3]
+    :type xyz: narray
+    :param K: 相机内参矩阵[3, 3]
+    :type K: narry
+    :param RT: 相机坐标系到世界坐标系的位姿变换矩阵[3, 4]
+    :type RT: narray
+    :return: 世界坐标在图像坐标系中的位置
+    :rtype: narray
     """
     xyz = np.dot(xyz, RT[:, :3].T) + RT[:, 3:].T
     xyz = np.dot(xyz, K.T)
@@ -55,5 +62,6 @@ def cm_degree_5(pose_pred, pose_targets):
     rotation_diff = np.dot(pose_pred[:, :3], pose_targets[:, :3].T)
     trace = np.trace(rotation_diff)
     trace = trace if trace <= 3 else 3
+    trace = trace if trace >= -1 else -1
     angular_distance = np.rad2deg(np.arccos((trace - 1.) / 2.))
     return translation_distance, angular_distance

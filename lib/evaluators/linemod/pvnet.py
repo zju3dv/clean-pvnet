@@ -86,6 +86,7 @@ class Evaluator:
         rotation_diff = np.dot(pose_pred[:, :3], pose_targets[:, :3].T)
         trace = np.trace(rotation_diff)
         trace = trace if trace <= 3 else 3
+        trace = trace if trace >= -1 else -1
         angular_distance = np.rad2deg(np.arccos((trace - 1.) / 2.))
         if icp:
             self.icp_cmd5.append(translation_distance < 5 and angular_distance < 5)

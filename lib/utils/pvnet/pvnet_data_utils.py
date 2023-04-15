@@ -64,6 +64,14 @@ def compute_vertex(mask, kpt_2d):
 
 
 def get_ply_model(model_path):
+    """
+    get_ply_model 读取指定的三维ply模型,并返回模型上的三维点坐标
+
+    :param model_path: 三维模型的路径
+    :type model_path: str
+    :return: 模型上的三维坐标(n*3)
+    :rtype: narray
+    """
     ply = PlyData.read(model_path)
     data = ply.elements[0].data
     x = data['x']

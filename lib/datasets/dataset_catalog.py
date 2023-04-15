@@ -94,10 +94,16 @@ class DatasetCatalog(object):
             'ann_file': 'data/custom/train.json',
             'split': 'train'
         },
+        'Customval':{
+            'id': 'custom',
+            'data_root': 'data/custom',
+            'ann_file': 'data/custom/vali.json',
+            'split': 'val'
+        },
         'CustomTest': {
             'id': 'custom',
             'data_root': 'data/custom',
-            'ann_file': 'data/custom/train.json',
+            'ann_file': 'data/custom/test.json',
             'split': 'test'
         }
     }
