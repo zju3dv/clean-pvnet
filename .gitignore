@@ -12,3 +12,4 @@ __pycache__/
 *.npy
 docs/
 test.py
+render/

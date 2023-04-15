@@ -14,6 +14,11 @@ dataset_catalog模块
 
 from lib.config import cfg
 
+# from yacs.config import CfgNode as CN
+# cfg = CN()
+# cfg.cls_type = 'cat'
+
+
 class DatasetCatalog(object):
     """
     DatasetCatalog 数据集的路径信息管理器
