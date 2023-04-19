@@ -14,8 +14,6 @@ import torch
 # 自建库
 from lib.utils.optimizer.radam import RAdam
 
-optim =  RAdam()
-
 _optimizer_factory = {
     'adam': torch.optim.Adam,
     'radam': RAdam,

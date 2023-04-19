@@ -5,18 +5,14 @@ dataset_catalog模块
 本模块通过DatasetCatalog类来管理不同数据集(Linemod, Tless, custom, etc.)
 的路径信息：
 
-- 数据集id：即本目录内的custom, linemod等文件夹
-- 原始数据文件路径：即img图片在本项目中的路径信息
-- 标注文件路径：即annotation文件在本项目中的路径信息
+- 数据集id:即本目录内的custom, linemod等文件夹
+- 原始数据文件路径:即img图片在本项目中的路径信息
+- 标注文件路径:即annotation文件在本项目中的路径信息
 
-并可以通过数据集的标识符，使用类的静态函数get()获取指定数据集的路径信息。
+并可以通过数据集的标识符,使用类的静态函数get()获取指定数据集的路径信息。
 """
 
 from lib.config import cfg
-
-# from yacs.config import CfgNode as CN
-# cfg = CN()
-# cfg.cls_type = 'cat'
 
 
 class DatasetCatalog(object):
@@ -99,7 +95,7 @@ class DatasetCatalog(object):
             'ann_file': 'data/custom/train.json',
             'split': 'train'
         },
-        'Customval':{
+        'CustomVal':{
             'id': 'custom',
             'data_root': 'data/custom',
             'ann_file': 'data/custom/vali.json',

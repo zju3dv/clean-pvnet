@@ -27,8 +27,8 @@ class Trainer(object):
         :param network: 神经网络实例
         :type network: torch.nn.Module实例
         """
-        network = network.cuda()  # 将网络中的参数和缓存移动到GPU内进行计算
-        network = DataParallel(network)  # 实现多GPU并行计算
+        # network = network.cuda()  # 将网络中的参数和缓存移动到GPU内进行计算
+        # network = DataParallel(network)  # 实现多GPU并行计算
         self.network = network
         """神经网络实例"""
 
@@ -80,7 +80,7 @@ class Trainer(object):
         """最大迭代次数(即批数量)"""
         self.network.train()  # 设置神经网络为训练模式(使BN层在训练过程更新自身参数)
         end = time.time()
-        for iteration, batch in enumerate(data_loader):
+        for iteration, batch in tqdm.tqdm(enumerate(data_loader)):
             data_time = time.time() - end
             """数据加载时间"""
             iteration = iteration + 1
@@ -121,6 +121,7 @@ class Trainer(object):
                 # record loss_stats and image_dict
                 recorder.update_image_stats(image_stats)
                 recorder.record('train')
+
 
     def val(self, epoch, data_loader, evaluator=None, recorder=None):
         """

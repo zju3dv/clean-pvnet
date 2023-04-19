@@ -167,7 +167,7 @@ def make_data_loader(cfg, is_train=True, is_distributed=False, max_iter=-1):
         shuffle = True if is_distributed else False
         drop_last = False
 
-    dataset_name = cfg.train.dataset if is_train else cfg.test.dataset
+    dataset_name = cfg.train.dataset if is_train else cfg.val.dataset if cfg.is_val else cfg.test.dataset
 
     
     transforms = make_transforms(cfg, is_train)                         # 生成transforms实例

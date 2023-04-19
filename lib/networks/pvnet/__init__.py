@@ -30,11 +30,6 @@ networks.pvnet模块
 """
 from .resnet18  import get_res_pvnet
 
-_network_factory = {
-    'res': get_res_pvnet
-}
-"""network工厂"""
-
 
 def get_network(cfg):
     """
@@ -45,7 +40,6 @@ def get_network(cfg):
     :return: PVNet实例
     :rtype: torch.nn.Module
     """
-    arch = cfg.network
-    get_model = _network_factory[arch]
+    get_model = get_res_pvnet
     network = get_model(cfg.heads['vote_dim'], cfg.heads['seg_dim'])
     return network

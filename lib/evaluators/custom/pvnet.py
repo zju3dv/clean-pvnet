@@ -55,7 +55,7 @@ class Evaluator:
 
         data_root = args['data_root']
         """测试集的文件夹根目录"""
-        model_path = data_root + 'model.ply'
+        model_path = data_root + '/model.ply'
         """待测目标的三维模型路径"""
         self.model = pvnet_data_utils.get_ply_model(model_path)
         """目标模型的空间点坐标"""

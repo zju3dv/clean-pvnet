@@ -293,7 +293,8 @@ class ResNet(nn.Module):
             self.avgpool = nn.AvgPool2d(7, padding=3, stride=1)
             # In the latest unstable torch 4.0 the tensor.copy_
             # method was changed and doesn't work as it used to be
-            self.fc = nn.Conv2d(512 * block.expansion, num_classes, 1)
+            # self.fc = nn.Conv2d(512 * block.expansion, num_classes, 1)
+            self.fc = nn.Linear(512 * block.expansion, num_classes)
         else:                # 若为普通的resnet网络,则最后一层仍为全连接层
             self.avgpool = nn.AdaptiveAvgPool2d((1,1))
             self.fc = nn.Linear(512 * block.expansion, num_classes)
