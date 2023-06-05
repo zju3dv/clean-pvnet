@@ -77,8 +77,8 @@ Download datasets which are formatted for this project:
 2. [linemod_orig](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/Eh27tt7m6fJNgcCKMp9BzjABRzJTju6bT2GIZzcIVGu9WA?e=vURdqJ): The dataset includes the depth for each image.
 3. [occlusion linemod](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/Eh27tt7m6fJNgcCKMp9BzjABRzJTju6bT2GIZzcIVGu9WA?e=vURdqJ)
 4. [truncation linemod](https://1drv.ms/u/s!AtZjYZ01QjphfuDICdni1IIM4SE): Check [TRUNCATION_LINEMOD.md](TRUNCATION_LINEMOD.md) for the information about the Truncation LINEMOD dataset.
-5. [Tless](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/EjoUiAwfPOhGgFGPnJANDqoBLxnUAc7DO77voz6-KVp5Wg?e=6UGB3p): `cat tlessa* | tar xvf - -C .`.
-6. [Tless cache data](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/EjoUiAwfPOhGgFGPnJANDqoBLxnUAc7DO77voz6-KVp5Wg?e=6UGB3p): It is used for training and testing on Tless.
+5. [Tless](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/Eh27tt7m6fJNgcCKMp9BzjABRzJTju6bT2GIZzcIVGu9WA?e=vURdqJ): `cat tlessa* | tar xvf - -C .`.
+6. [Tless cache data](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/Eh27tt7m6fJNgcCKMp9BzjABRzJTju6bT2GIZzcIVGu9WA?e=vURdqJ): It is used for training and testing on Tless.
 7. [SUN2012pascalformat](http://groups.csail.mit.edu/vision/SUN/releases/SUN2012pascalformat.tar.gz)
 
 ## Testing
