@@ -264,7 +264,8 @@ class GeoCrossEntropyLoss(nn.Module):
 
 def load_model(net, optim, scheduler, recorder, model_dir, resume=True, epoch=-1):
     if not resume:
-        os.system('rm -rf {}'.format(model_dir))
+        # os.system('rm -rf {}'.format(model_dir))
+        return 0
 
     if not os.path.exists(model_dir):
         return 0
