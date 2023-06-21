@@ -201,7 +201,7 @@ If setup correctly, the output will look like
 
 ## Training on the custom object
 
-An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/Ec6Hd9j7z4lCiwDhqIwDcScBGPw2rsbn6FJh1C2FwbPJTw?e=xcKGAw).
+An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/Eh27tt7m6fJNgcCKMp9BzjABRzJTju6bT2GIZzcIVGu9WA?e=vURdqJ).
 
 1. Create a dataset using https://github.com/F2Wang/ObjectDatasetTools
 2. Organize the dataset as the following structure:
@@ -252,7 +252,7 @@ An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.co
     python run.py --type evaluate --cfg_file configs/custom.yaml
     ```
 
-An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/Ec6Hd9j7z4lCiwDhqIwDcScBGPw2rsbn6FJh1C2FwbPJTw?e=xcKGAw).
+An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/Eh27tt7m6fJNgcCKMp9BzjABRzJTju6bT2GIZzcIVGu9WA?e=vURdqJ).
 
 ## Citation
 
