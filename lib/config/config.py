@@ -93,7 +93,7 @@ cfg.result_dir = 'data/result'
 cfg.skip_eval = False
 
 # dataset
-cfg.cls_type = 'cat'
+cfg.cls_type = 'tango' #'cat'
 
 # tless
 cfg.tless = CN()
@@ -106,8 +106,8 @@ cfg.tless.rot = 360.
 cfg.tless.ratio = 0.8
 
 _heads_factory = {
-    'pvnet': CN({'vote_dim': 18, 'seg_dim': 2}),
-    'ct_pvnet': CN({'vote_dim': 18, 'seg_dim': 2}),
+    'pvnet': CN({'vote_dim': 24, 'seg_dim': 2}), # vote_dim:18
+    'ct_pvnet': CN({'vote_dim': 24, 'seg_dim': 2}), # vote_dim:18
     'ct': CN({'ct_hm': 30, 'wh': 2})
 }
 

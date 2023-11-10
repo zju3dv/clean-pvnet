@@ -124,7 +124,7 @@ def crop_or_padding(img, mask, hcoords, hratio, wratio):
 
 
 def crop_or_padding_to_fixed_size_instance(img, mask, hcoords, th, tw, overlap_ratio=0.5):
-    h, w, _ = img.shape
+    h, w, _ = img.shape #mark
     hs, ws = np.nonzero(mask)
 
     hmin, hmax = np.min(hs), np.max(hs)
